@@ -17,8 +17,12 @@ public class DiscardServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        ByteBuf message = (ByteBuf) msg;
         try {
-            // Do something with msg
+            while (message.isReadable()) {
+                System.out.print((char) message.readByte());
+                System.out.flush();
+            }
         } finally {
             //이 부분에서 왜 Netty는 try-with-resource문을 사용하지 않을까 의문이었고 결론적으로 Netty 4.1은 대부분 Java 6에 대해 컴파일 되어서임을 알게되었다.
             //https://github.com/netty/netty/issues/9498
